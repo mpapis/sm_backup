@@ -10,9 +10,11 @@ download library:
     mkdir ~/lib && cd ~/lib
     git clone git://github.com/mpapis/backup_sh.git
 
-add to your ~/.bash_rc file:
+add to your ~/.bashrc file:
 
     export PATH=$PATH:~/lib/backup_sh
+
+now restart console or run above command in eah shell which will be used for backup
 
 ### usage
 create simple bash script ~/lib/backup_sh/backup_something.sh:
