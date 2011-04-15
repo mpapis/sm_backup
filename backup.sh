@@ -5,12 +5,13 @@
 # default is to keep last 5 files starting with backup_$NAME_*
 function rotate(){
   amount=${1:-5}
+  echo "Cleaning: leaving last $amount backups"
   prefix=${PREFIX:-backup}
   name=${2:-$NAME}
   suffix=${SUFFIX:+${SUFFIX}_}
   ls -1v ${prefix}_${name}_${suffix}* 2>/dev/null | head -n -$amount | while read file
   do
-    echo -n "removing $file ... " && rm -rfv $file || echo 'failed'
+    echo -n "  removing $file ... " && rm -rfv $file || echo 'failed'
   done
 }
 
@@ -31,10 +32,13 @@ function backup_file(){
   name=${1:-$NAME}
   suffix=${SUFFIX:+${SUFFIX}_}
   extension=${2:-backup}
-  echo "${prefix}_${name}_${suffix}$(date +%Y%m%d_%H%M%S).${extension}"
+  file="${prefix}_${name}_${suffix}$(date +%Y%m%d_%H%M%S).${extension}"
+  echo "Creating file $file" >&2
+  echo $file
 }
 
 function backup_dir(){
+  echo "Backup directory $1"
   [ -d $1 ] || mkdir $1
   cd $1
 }
