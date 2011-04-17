@@ -67,12 +67,16 @@ function ssh_incr(){
   remote_dir=$2
   amount=${3:-5}
   local=${4:-.}
-  reference=$(ssh $server "ls -1v $remote_dir | tail -n 1")
-  [ "x$reference" != 'x' ] && reference="--link-dest=../$reference"
-  target=$remote_dir/$(time_marker)
+  name=${NAME:-$(basename $(cd $local ; pwd))}
+  echo "SSH incremental backup for $name"
+  pattern="$(backup_pattern $name '*')"
+  reference=$(ssh $server "cd $remote_dir; ls -1vd $pattern 2>/dev/null | tail -n 1")
+  [ "x$reference" != 'x' ] && echo "Using $reference as reference" && reference="--link-dest=../$reference"
+  target=$remote_dir/$(backup_pattern $name $(time_marker))
   ssh $server "mkdir -p $target"
   rsync --rsh=ssh --del -av $reference $local $server:$target
-  ssh $server "cd $remote_dir; ls -1vd * | head -n -$amount | while read f; do echo -n \"removing \$f ... \" && rm -rf \$f && echo removed || echo failed; done"
+  echo "Cleaning: leaving last $amount backups"
+  ssh $server "cd $remote_dir; ls -1vd $pattern | head -n -$amount | while read f; do echo -n \"  Removing \$f ... \" && rm -rf \$f && echo removed || echo failed; done"
 }
 
 # usage:
