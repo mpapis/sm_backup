@@ -22,6 +22,19 @@ function dump_mysql(){
 }
 
 # usage:
+#   dump_dir directory [another/directory]
+# create package with the given directories, 
+# options can also contain -C relative/point/of/backup ex:
+#   dump_dir -C /my/files/path dir_to_backup file_to_backup
+# if $NAME is not set package is named after the first directory
+function dump_dir(){
+  name=${NAME:-$(basename $1)}
+  file=$(backup_pattern "$name" "$(time_marker).tgz")
+  echo "Creating file $file" >&2
+  tar czf $file "$@"
+}
+
+# usage:
 #   rotate [amount] ['pattern']
 # default is to keep last 5 files starting with backup_$NAME_*
 function rotate(){
@@ -31,6 +44,14 @@ function rotate(){
   do
     echo -n "  removing $file ... " && rm -rfv $file || echo 'failed'
   done
+}
+
+# usage:
+#   ssh_push remote_location
+# rsync backup dir to ssh location, clean extraneous files on remote
+function ssh_push(){
+  sh -c "$(echo $1 | sed -r 's/(.*):(.*)/ssh \1 "mkdir -p \2"/')"
+  rsync --rsh=ssh --del  -av . $1
 }
 
 # usage:
