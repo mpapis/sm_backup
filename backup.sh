@@ -47,11 +47,32 @@ function rotate(){
 }
 
 # usage:
-#   ssh_push remote_location
+#   ssh_push [user@]server remote_location
 # rsync backup dir to ssh location, clean extraneous files on remote
 function ssh_push(){
-  sh -c "$(echo $1 | sed -r 's/(.*):(.*)/ssh \1 "mkdir -p \2"/')"
-  rsync --rsh=ssh --del  -av . $1
+  ssh $1 "mkdir -p $2"
+  rsync --rsh=ssh --del  -av . $1:$2
+}
+
+# usage:
+#   ssh_incr [user@]server remote_location [amount] [local_dir]
+# rsync backup dir to ssh location, clean extraneous files on remote,
+# if amount is not given default 5 is taken, local dir if not specified then current dir is used
+# - uses last backup to speed up transfer time, existing files are symlinked,
+#   removing of old backups is done after syncing new backup (only new files take place)
+# - a special case is when amount is 1, there exists only one backup,
+#   but old one is not removed untill new one is not created
+function ssh_incr(){
+  server=$1
+  remote_dir=$2
+  amount=${3:-5}
+  local=${4:-.}
+  reference=$(ssh $server "ls -1v $remote_dir | tail -n 1")
+  [ "x$reference" != 'x' ] && reference="--link-dest=../$reference"
+  target=$remote_dir/$(time_marker)
+  ssh $server "mkdir -p $target"
+  rsync --rsh=ssh --del -av $reference $local $server:$target
+  ssh $server "cd $remote_dir; ls -1vd * | head -n -$amount | while read f; do echo -n \"removing \$f ... \" && rm -rf \$f && echo removed || echo failed; done"
 }
 
 # usage:
