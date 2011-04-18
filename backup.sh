@@ -73,10 +73,24 @@ function ssh_incr(){
   reference=$(ssh $server "cd $remote_dir; ls -1vd $pattern 2>/dev/null | tail -n 1")
   [ "x$reference" != 'x' ] && echo "Using $reference as reference" && reference="--link-dest=../$reference"
   target=$remote_dir/$(backup_pattern $name $(time_marker))
+  echo "Ensure target dir $(basename $target) exists"
   ssh $server "mkdir -p $target"
+  echo "Send files"
   rsync --rsh=ssh --del -av $reference $local $server:$target
   echo "Cleaning: leaving last $amount backups"
   ssh $server "cd $remote_dir; ls -1vd $pattern | head -n -$amount | while read f; do echo -n \"  Removing \$f ... \" && rm -rf \$f && echo removed || echo failed; done"
+}
+
+# usage:
+#   ssh_incr [user@]server remote_location [name]
+# show backups on remote side, NAME is not set then it has to be passed explicitly as name
+function ssh_incr_show(){
+  server=$1
+  remote_dir=$2
+  name=${NAME:-$3}
+  echo "SSH incremental backups for $name:"
+  pattern="$(backup_pattern $name '*')"
+  ssh $server "cd $remote_dir; ls -1vd $pattern"
 }
 
 # usage:
