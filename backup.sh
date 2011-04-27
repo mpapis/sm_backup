@@ -17,7 +17,7 @@ function dump_mysql(){
   db_name=${1:-$NAME}
   mysql_params=${2:-$MYSQL_PARAMS}
   file=$(backup_pattern "$db_name" "$(time_marker).sql.gz")
-  echo "Creating file $file" >&2
+  echo "Creating file $file"
   mysqldump $mysql_params $db_name | gzip -c > $file
 }
 
@@ -30,7 +30,7 @@ function dump_mysql(){
 function dump_dir(){
   name=${NAME:-$(basename $1)}
   file=$(backup_pattern "$name" "$(time_marker).tgz")
-  echo "Creating file $file" >&2
+  echo "Creating file $file"
   tar czf $file "$@"
 }
 
