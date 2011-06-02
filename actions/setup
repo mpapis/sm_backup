@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+force=false
+while array_is_nonempty extension_args
+do
+  array_shift extension_args token
+  case $token in
+    -f|--force)
+      force=true
+      ;;
+    *)
+      name=$token
+      ;;
+  esac
+done
+
+variables_must_be_nonempty name
+
+if $force
+then
+  remove_files $name
+else
+  if file_exists $name
+  then
+    error "$name - backup file already exists"
+  fi
+fi
+
+install_template backup.sh.template to $name mode 755

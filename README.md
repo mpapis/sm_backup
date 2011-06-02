@@ -4,38 +4,32 @@ Library tool to support easy backup using bash tools
 ## author
 Michal Papis <mpapis@gmail.com>
 
+## Prerequisites
+
+BDSM - https://bdsm.beginrescueend.com/
+
 ## installation
-download library:
 
-    mkdir ~/lib && cd ~/lib
-    git clone git://github.com/mpapis/backup_sh.git
+    git clone git://github.com/mpapis/bdsm_backup.git /usr/local/bdsm/extensions/backup)
 
-add to your ~/.bashrc file:
+Shortly it should be possible to install using following command (this does not work yet)
 
-    export PATH=$PATH:~/lib/backup_sh
-
-now restart console or run above command in eah shell which will be used for backup
+    bdsm extend mpapis/bdsm_backup as backup
 
 ## usage
-create simple bash script ~/lib/backup_sh/backup_something.sh:
+create simple backup script
 
-    #!/bin/bash
-    
-    source ~/lib/backup_sh/backup.sh
-    backup_dir ~/backups
-    
-    NAME=your_db_name
-    SUFFIX=db
-    dump_mysql
-    rotate 3
+    bdsm backup setup sample_script
 
-add execution rights to the new script:
+edit sample script
 
-    chmod +x ~/lib/backup_sh/backup_something.sh
+    bdsm backup edit sample_script
+
+Thereare already som contents in the file, uncomment them to have fun with backups.
 
 make a test run of backup:
 
-    ~/lib/backup_sh/backup_something.sh
+    ./sample_script
 
 add a cron job to run the script:
 

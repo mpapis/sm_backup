@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+$extension_args
+
+if file_is_missing $extension_args
+then
+  error "$extension_args - probably this is not a backup file"
+fi
+
+if command_exists vim
+then
+  DEFAULT=vim
+else
+  DEFAULT=vi
+fi
+
+${EDITOR:-$DEFAULT} $extension_args

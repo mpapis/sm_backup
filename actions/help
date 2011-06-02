@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+description "Backup your data with easy"
+
+action "setup [name] [-f]" "Generate basic backup script, use -f to overwrite existing file"
+action "edit [name]" "Edit backup script in your favorite editor"
+action "install [name]" "Add backup script to cron."
+action "uninstall [name]" "Remove backup script from cron."
+action "run [name]" "Run script"
+
+show_help usage
