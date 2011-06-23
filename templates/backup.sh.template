@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-source "/usr/local/bdsm/modules/bash/core/initialize" # Load BDSM framework
-source "/usr/local/bdsm/extensions/backup/modules/bash/dsl" #Load backup framework
+source "/usr/local/bdsm/modules/shell/core/initialize" # Load BDSM framework
+source "/usr/local/bdsm/extensions/backup/modules/shell/dsl" #Load backup framework
 
 # Example backup script uncomment samples bellow for quick start
 
