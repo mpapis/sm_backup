@@ -15,15 +15,16 @@ do
 done
 
 variables_must_be_nonempty name
+target="$(pwd)/$name"
 
 if $force
 then
-  remove_files $name
+  remove_files $target
 else
-  if file_exists $name
+  if file_exists $target
   then
-    error "$name - backup file already exists"
+    error "$name - backup script already exists"
   fi
 fi
 
-install_template backup.sh.template to $name mode 755
+install_template backup.sh.template to $target mode 755
