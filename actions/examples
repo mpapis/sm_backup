@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+enter examples
+less -N *

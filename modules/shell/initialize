@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
+# Load BDSM framework
+. "/usr/local/bdsm/modules/shell/core/dsl"
+. "/usr/local/bdsm/modules/shell/core/initialize"
+
 modules templates filesystem
+
+#Load backup framework
+. "/usr/local/bdsm/extensions/backup/modules/shell/dsl"

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ~/lib/backup_sh/backup.sh
+#Load backup framework
+. "/usr/local/bdsm/extensions/backup/modules/shell/initialize"
 
 backup_dir ~/tmp/test1
 ssh_push localhost ~/tmp/test2

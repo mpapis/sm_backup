@@ -5,8 +5,8 @@
 # ensures that the given directory exists and sets it as target for backups
 function backup_dir(){
   echo "Backup directory $1"
-  [ -d $1 ] || mkdir $1
-  cd $1
+  [ -d $1 ] || mkdir -p $1
+  enter $1
 }
 
 # usage:

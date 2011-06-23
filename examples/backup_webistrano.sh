@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-source ~/lib/backup_sh/backup.sh
+#Load backup framework
+. "/usr/local/bdsm/extensions/backup/modules/shell/initialize"
+
 backup_dir ~/tmp/test
 
 MYSQL_PARAMS='-u backup -pbackup_password'
