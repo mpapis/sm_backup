@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-if file_is_missing $extension_args
+target="$initial_pwd/$extension_args"
+
+if file_is_missing $target
 then
   error "$extension_args - probably this is not a backup file"
 fi
@@ -12,4 +14,4 @@ else
   DEFAULT=vi
 fi
 
-${EDITOR:-$DEFAULT} $extension_args
+${EDITOR:-$DEFAULT} $target
