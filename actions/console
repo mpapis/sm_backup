@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+bash --rcfile <(echo "
+  export PS1='(backup) ${PS1:-\u@\h:\w>}'
+  . /usr/local/bdsm/extensions/backup/modules/shell/initialize
+") -i

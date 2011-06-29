@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+help()
+{
+  description "Backup your data with easy"
+
+  action "setup [name] [-f]" "Generate basic backup script, use -f to overwrite existing file"
+  action "edit [name]" "Edit backup script in your favorite editor"
+  action "examples" "show examples scripts for bdsm backup"
+  #action "install [name]" "Add backup script to cron."
+  #action "uninstall [name]" "Remove backup script from cron."
+  #action "run [name]" "Run script"
+
+  show_help usage
+}
+
 # usage:
 #   backup_dir directory
 # ensures that the given directory exists and sets it as target for backups

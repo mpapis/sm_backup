@@ -14,7 +14,7 @@ BDSM - https://bdsm.beginrescueend.com/
 
 Shortly it should be possible to install using following command (this does not work yet)
 
-    bdsm extend mpapis/bdsm_backup as backup
+    bdsm extend mpapis/bdsm_backup backup
 
 ## usage
 create simple backup script

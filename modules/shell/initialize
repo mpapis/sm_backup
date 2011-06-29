@@ -7,4 +7,4 @@
 modules templates filesystem
 
 #Load backup framework
-. "/usr/local/bdsm/extensions/backup/modules/shell/dsl"
+. "/usr/local/bdsm/extensions/external/backup/modules/shell/dsl"
