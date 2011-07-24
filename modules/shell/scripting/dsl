@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# usage:
+#   backup_dir directory
+# ensures that the given directory exists and sets it as target for backups
+function backup_dir(){
+  echo "Backup directory $1"
+  [ -d $1 ] || mkdir -p $1
+  enter $1
+}
+
+# usage:
+#   dump_mysql [db_name] ['db_params']
+# name if not given will use $NAME
+# db_params if not given will use $MYSQL_PARAMS
+function dump_mysql(){
+  db_name=${1:-$NAME}
+  mysql_params=${2:-$MYSQL_PARAMS}
+  file=$(backup_pattern "$NAME" "$(time_marker).sql.gz")
+  echo "Creating file $file"
+  mysqldump $mysql_params $db_name | gzip -c > $file
+}
+
+# usage:
+#   dump_dir directory [another/directory]
+# create package with the given directories, 
+# options can also contain -C relative/point/of/backup ex:
+#   dump_dir -C /my/files/path dir_to_backup file_to_backup
+# if $NAME is not set package is named after the first directory
+function dump_dir(){
+  name=${NAME:-$(basename $1)}
+  file=$(backup_pattern "$name" "$(time_marker).tgz")
+  echo "Creating file $file"
+  tar czf $file "$@"
+}
+
+# usage:
+#   rotate [amount] ['pattern']
+# default is to keep last 5 files starting with backup_$NAME_*
+function rotate(){
+  amount=${1:-5}
+  echo "Cleaning: leaving last $amount backups"
+  ls -1v $(backup_pattern "$2" '*') 2>/dev/null | head -n -$amount | while read file
+  do
+    echo -n "  removing $file ... " && rm -rfv $file || echo 'failed'
+  done
+}
+
+# usage:
+#   ssh_push [user@]server remote_location
+# rsync backup dir to ssh location, clean extraneous files on remote
+function ssh_push(){
+  ssh $1 "mkdir -p $2"
+  rsync --rsh=ssh --del  -av . $1:$2
+}
+
+# usage:
+#   ssh_incr [user@]server remote_location [amount] [local_dir]
+# rsync backup dir to ssh location, clean extraneous files on remote,
+# if amount is not given default 5 is taken, local dir if not specified then current dir is used
+# - uses last backup to speed up transfer time, existing files are symlinked,
+#   removing of old backups is done after syncing new backup (only new files take place)
+# - a special case is when amount is 1, there exists only one backup,
+#   but old one is not removed untill new one is not created
+function ssh_incr(){
+  server=$1
+  remote_dir=$2
+  amount=${3:-5}
+  local=${4:-.}
+  name=${NAME:-$(basename $(cd $local ; pwd))}
+  echo "SSH incremental backup for $name"
+  pattern="$(backup_pattern $name '*')"
+  reference=$(ssh $server "cd $remote_dir; ls -1vd $pattern 2>/dev/null | tail -n 1")
+  [ "x$reference" != 'x' ] && echo "Using $reference as reference" && reference="--link-dest=../$reference"
+  target=$remote_dir/$(backup_pattern $name $(time_marker))
+  echo "Ensure target dir $(basename $target) exists"
+  ssh $server "mkdir -p $target"
+  echo "Send files"
+  rsync --rsh=ssh --del -av $reference $local $server:$target
+  echo "Cleaning: leaving last $amount backups"
+  ssh $server "cd $remote_dir; ls -1vd $pattern | head -n -$amount | while read f; do echo -n \"  Removing \$f ... \" && rm -rf \$f && echo removed || echo failed; done"
+}
+
+# usage:
+#   ssh_incr [user@]server remote_location [name]
+# show backups on remote side, NAME is not set then it has to be passed explicitly as name
+function ssh_incr_show(){
+  server=$1
+  remote_dir=$2
+  name=${NAME:-$3}
+  echo "SSH incremental backups for $name:"
+  pattern="$(backup_pattern $name '*')"
+  ssh $server "cd $remote_dir; ls -1vd $pattern"
+}
+
+# usage:
+#   backup_pattern name [additional]
+# generates name suitable for common actions
+function backup_pattern(){
+  prefix=${PREFIX:-backup}
+  name=${1:-$NAME}
+  suffix=${SUFFIX:+${SUFFIX}_}
+  echo ${prefix}_${name}_${suffix}$2
+}
+
+# usage:
+#   time_marker
+# generates universal time maker
+function time_marker(){
+  date +%Y%m%d_%H%M%S
+}

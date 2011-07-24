@@ -1,7 +1,7 @@
 #!/usr/bin/env bdsm
 
 #Load backup framework
-module_or_error "{{extension}}" \
+module_or_error "{{extension}}/scripting" \
   "{{extension}} extension not available, install it with:  bdsm extend mpapis/bdsm_backup {{extension}}"
 
 # Example backup script uncomment samples bellow for quick start
