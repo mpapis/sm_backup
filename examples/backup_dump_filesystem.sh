@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bdsm
 
 #Load backup framework
-. "/usr/local/bdsm/extensions/backup/modules/shell/initialize"
+module_or_error "backup" \
+  "backup extension not available, install it with:  bdsm extend mpapis/bdsm_backup backup"
 
 backup_dir ~/tmp/test
 

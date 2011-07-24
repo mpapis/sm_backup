@@ -1,5 +1,5 @@
 ## backup_sh
-Library tool to support easy backup using bash tools
+Library tool to support easy backup using bdsm and bash tools
 
 ## author
 Michal Papis <mpapis@gmail.com>
@@ -9,10 +9,6 @@ Michal Papis <mpapis@gmail.com>
 BDSM - https://bdsm.beginrescueend.com/
 
 ## installation
-
-    git clone git://github.com/mpapis/bdsm_backup.git /usr/local/bdsm/extensions/backup)
-
-Shortly it should be possible to install using following command (this does not work yet)
 
     bdsm extend mpapis/bdsm_backup backup
 
@@ -25,7 +21,7 @@ edit sample script
 
     bdsm backup edit sample_script
 
-Thereare already som contents in the file, uncomment them to have fun with backups.
+There are already some contents in the file, uncomment them to have fun with backups.
 
 make a test run of backup:
 
@@ -39,7 +35,7 @@ you probably got an vim editor so press `i` for editing mode and paste this line
 
     6 0 * * * ~/lib/backup_sh/backup_something.sh
 
-and save the changes by pressing `ESC :wq` (vim editor), this will call the backup everyday at 6am.
+save the changes by pressing `ESC :wq` (vim editor), this will call the backup everyday at 6am.
 
 ## available functions
 
@@ -76,4 +72,3 @@ Database parmaeters can be given as second parameter or by `MYSQL_PARAMS` variab
 Creates package with files, if `NAME` is not set then basename of first directory is used.
 
     dump_dir /some/path/application_data
-

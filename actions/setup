@@ -27,4 +27,6 @@ else
   fi
 fi
 
-install_template backup.sh.template to $target mode 755
+install_template $extension/backup.sh.template to $target
+seed_template $target extension $extension
+ensure_files_are_executable $target
