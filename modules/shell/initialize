@@ -1,3 +1,0 @@
-#!/usr/bin/env bdsm
-
-modules std/templates bdsm/filesystem

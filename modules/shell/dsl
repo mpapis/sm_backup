@@ -13,3 +13,62 @@ help()
 
   show_help usage
 }
+
+setup()
+{
+  force=false
+  while array_is_nonempty extension_args
+  do
+    array_shift extension_args token
+    case $token in
+      -f|--force)
+        force=true
+        ;;
+      *)
+        name=$token
+        ;;
+    esac
+  done
+
+  variables_must_be_nonempty name
+  target="$initial_pwd/$name"
+
+  if $force
+  then
+    remove_files $target
+  else
+    if file_exists $target
+    then
+      error "$name - backup script already exists"
+    fi
+  fi
+
+  install_template $extension/backup.sh.template to $target
+  seed_template $target extension $extension
+  ensure_files_are_executable $target
+}
+
+examples()
+{
+  enter examples
+  less -N *
+}
+
+edit()
+{
+  target="$initial_pwd/$extension_args"
+
+  if file_is_missing $target
+  then
+    error "$extension_args - probably this is not a backup file"
+  fi
+
+  if command_exists vim
+  then
+    DEFAULT=vim
+  else
+    DEFAULT=vi
+  fi
+
+  ${EDITOR:-$DEFAULT} $target
+}
