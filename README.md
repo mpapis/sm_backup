@@ -9,8 +9,20 @@ Michal Papis <mpapis@gmail.com>
 BDSM - https://bdsm.beginrescueend.com/
 
 ## installation
+First time installation:
 
     bdsm ext install backup mpapis/bdsm_backup
+
+Updating to latest version:
+
+    bdsm ext update backup
+
+Take note that the backup name above can be replaced with other name if required.
+Example:
+
+    bdsm ext install mp_backup mpapis/bdsm_backup
+
+This will influence all the following commands and require to reference this extension as mp_backup
 
 ## usage
 create simple backup script
