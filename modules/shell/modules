@@ -1,3 +1,4 @@
+ext/array
 ext/templates
-bdsm/filesystem
-bdsm/help
+ext/filesystem
+ext/help

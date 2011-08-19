@@ -10,7 +10,7 @@ BDSM - https://bdsm.beginrescueend.com/
 
 ## installation
 
-    bdsm extend mpapis/bdsm_backup backup
+    bdsm ext install backup mpapis/bdsm_backup
 
 ## usage
 create simple backup script
