@@ -1,4 +1,4 @@
-#!/usr/bin/env bdsm
+#!/usr/bin/env sm
 
 #Load backup framework
 module_or_error "{{extension}}/scripting" \
