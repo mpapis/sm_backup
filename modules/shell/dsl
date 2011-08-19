@@ -50,7 +50,7 @@ setup()
 
 examples()
 {
-  enter examples
+  enter "${extension_path}/examples"
   less -N *
 }
 
