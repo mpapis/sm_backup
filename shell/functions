@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-help()
+backup_help()
 {
   description "Backup your data with easy"
 
@@ -14,7 +14,7 @@ help()
   show_help usage
 }
 
-setup()
+backup_setup()
 {
   force=false
   while array_is_nonempty extension_args
@@ -30,8 +30,14 @@ setup()
     esac
   done
 
-  variables_must_be_nonempty name
-  target="$initial_pwd/$name"
+  [[ -n "${name}" ]] || error "please provide script name"
+
+  if [[ "${name:0:1}" == "/" ]]
+  then
+    target="$name"
+  else
+    target="$initial_pwd/$name"
+  fi
 
   if $force
   then
@@ -48,13 +54,13 @@ setup()
   ensure_files_are_executable $target
 }
 
-examples()
+backup_examples()
 {
   enter "${extension_path}/examples"
   less -N *
 }
 
-edit()
+backup_edit()
 {
   target="$initial_pwd/$extension_args"
 

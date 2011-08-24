@@ -1,4 +1,0 @@
-setup=setup()
-help=help()
-examples=examples()
-edit=edit()
