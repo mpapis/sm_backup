@@ -1,4 +1,4 @@
-ext/array
-ext/templates
-ext/filesystem
-ext/help
+api/array
+api/templates
+api/filesystem
+api/help
