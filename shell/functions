@@ -16,10 +16,10 @@ backup_help()
 
 backup_setup()
 {
-  force=false
-  while array_is_nonempty extension_args
+  local force=false token name target
+  while array is nonempty extension_args
   do
-    array_shift extension_args token
+    array shift extension_args token
     case $token in
       -f|--force)
         force=true
@@ -30,28 +30,34 @@ backup_setup()
     esac
   done
 
-  [[ -n "${name}" ]] || error "please provide script name"
+  variables are nonempty name || error "please provide script name"
 
-  if [[ "${name:0:1}" == "/" ]]
-  then
-    target="$name"
-  else
-    target="$initial_pwd/$name"
-  fi
+  target="$(
+    files absolute path \
+      $initial_pwd \
+      $name
+  )"
 
-  if $force
+  if files exist $target
   then
-    remove_files $target
-  else
-    if file_exists $target
+    if $force
     then
+      files remove $target
+    else
       error "$name - backup script already exists"
     fi
   fi
 
-  install_template $extension/backup.sh.template to $target
-  seed_template $target extension $extension
-  ensure_files_are_executable $target
+  log_step "Generating backup script '${target}'"
+
+  templates install $extension/backup.sh.template to $target
+
+  templates seed $target \
+    extension $extension
+
+  files chmod 0755 $target
+
+  log_step success
 }
 
 backup_examples()
@@ -62,14 +68,18 @@ backup_examples()
 
 backup_edit()
 {
-  target="$initial_pwd/$extension_args"
+  target="$(
+    files absolute path \
+      $initial_pwd \
+      $extension_args
+  )"
 
-  if file_is_missing $target
+  if files are missing $target
   then
     error "$extension_args - probably this is not a backup file"
   fi
 
-  if command_exists vim
+  if command exists vim
   then
     DEFAULT=vim
   else

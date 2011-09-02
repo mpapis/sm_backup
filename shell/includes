@@ -1,4 +1,6 @@
 api/array
+api/command
 api/templates
-api/filesystem
+api/files
 api/help
+api/variables
