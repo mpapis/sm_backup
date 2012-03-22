@@ -1,6 +1,5 @@
 api/array
 api/command
 api/templates
-api/files
-api/help
+api/filesystem
 api/variables

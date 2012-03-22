@@ -2,16 +2,18 @@
 
 backup_help()
 {
-  description "Backup your data with easy"
+  printf "%b" "Backup your data with easy
 
-  action "setup [name] [-f]" "Generate basic backup script, use -f to overwrite existing file"
-  action "edit [name]" "Edit backup script in your favorite editor"
-  action "examples" "show examples scripts for bdsm backup"
-  #action "install [name]" "Add backup script to cron."
-  #action "uninstall [name]" "Remove backup script from cron."
-  #action "run [name]" "Run script"
+Usage:
 
-  show_help usage
+    sm backup [action]
+
+Actions:
+
+    setup [name] [-f]  #Generate basic backup script, use -f to overwrite existing file
+    edit  [name]       #Edit backup script in your favorite editor
+    examples           #show examples scripts for bdsm backup
+"
 }
 
 backup_setup()
@@ -62,7 +64,7 @@ backup_setup()
 
 backup_examples()
 {
-  enter "${extension_path}/examples"
+  path enter "${extension_path}/examples"
   less -N *
 }
 
